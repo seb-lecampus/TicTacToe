@@ -9,7 +9,7 @@ public class Main {
         System.out.println("Joueur 2: ");
         char p2 = input.nextLine().charAt(0);
 
-        TicTacToe ticTacToe = new TicTacToe(3, 3, new Player(p1), new Player(p2));
+        TicTacToe ticTacToe = new TicTacToe(4, 4, new Player(p1), new Player(p2));
         ticTacToe.play();
     }
 }
