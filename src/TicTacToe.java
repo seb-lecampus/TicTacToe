@@ -8,7 +8,9 @@ public class TicTacToe {
 
     private final Player p1;
     private final Player p2;
-    private Player winner = null;
+    private Player winner = null; // todo not player type ?
+
+    View view = new View();
 
     TicTacToe(int sizeX, int sizeY, Boolean player1_is_human, Boolean player2_is_human) {
         this.sizeX = sizeX;
@@ -26,7 +28,7 @@ public class TicTacToe {
 
         int[] move;
         do {
-            display();
+            view.display_board(board);
 
             // change current player
             current = (current == p1) ? p2 : p1;
@@ -36,27 +38,18 @@ public class TicTacToe {
                 if(isValidMove(move))
                     break;
                 else
-                    System.out.println("Invalid cell try again");
+                    view.warn_invalid_cell();
             } while (true);
 
             // set owner
             this.board[move[1]][move[0]].setOwner(current);
         } while(!isEnd(move, current));
 
-        display();
+        view.display_board(board);
         if(winner != null)
             System.out.printf("Winner %c !!!\n", winner.getRepresentation());
         else
             System.out.println("Draw !");
-    }
-
-    public void display(){
-        for(Cell[] line : this.board){
-            for(Cell cell : line)
-                System.out.print(cell.getRepresentation());
-            System.out.print("|");
-            System.out.println();
-        }
     }
 
     public Boolean isOnBoard(int[] move){
