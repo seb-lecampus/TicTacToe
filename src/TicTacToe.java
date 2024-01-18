@@ -10,15 +10,15 @@ public class TicTacToe {
     private final Player p2;
     private Player winner = null;
 
-    TicTacToe(int sizeX, int sizeY, Player p1, Player p2) {
+    TicTacToe(int sizeX, int sizeY, Boolean player1_is_human, Boolean player2_is_human) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.board = new Cell[sizeY][sizeX];
             for(int i=0; i < board.length; ++i)
                 for(int j=0; j < board[i].length; ++j)
                     board[i][j] = new Cell();
-        this.p1 = p1;
-        this.p2 = p2;
+        this.p1 = (player1_is_human) ? new PlayerHuman() : new PlayerCPU();
+        this.p2 = (player2_is_human) ? new PlayerHuman() : new PlayerCPU();
     }
 
     public void play(){
@@ -32,7 +32,7 @@ public class TicTacToe {
             current = (current == p1) ? p2 : p1;
 
             do {    // Ask cell
-                move = getMoveFromPlayer(current);
+                move = current.getMoveFromPlayer();
                 if(isValidMove(move))
                     break;
                 else
@@ -57,18 +57,6 @@ public class TicTacToe {
             System.out.print("|");
             System.out.println();
         }
-    }
-
-    public int[] getMoveFromPlayer(Player p){
-        int x, y;
-        Scanner input = new Scanner(System.in);
-
-        System.out.printf("Joueur %c coup x: ", p.getRepresentation());
-        x = input.nextInt();
-        System.out.printf("Joueur %c coup y: ", p.getRepresentation());
-        y = input.nextInt();
-
-        return new int[]{x, y};
     }
 
     public Boolean isOnBoard(int[] move){
@@ -99,6 +87,12 @@ public class TicTacToe {
         return true;
     }
 
+    /**
+     * check if the game can exit
+     * @param move
+     * @param p
+     * @return true if there is a winner of a draw
+     */
     public Boolean isEnd(int[] move, Player p){
         Boolean a = checkDir(move, new int[]{1, 1}, 3);
         Boolean b = checkDir(move, new int[]{1, 0}, 3);
@@ -112,11 +106,18 @@ public class TicTacToe {
             return checkfull();
     }
 
+    /**
+     * jrso^thijtsroij
+     * @param move a player movement
+     * @param dir vector like direction. Added to move each iteration.
+     * @param consecutive number of consecutive cell to win
+     * @return true if okrighh
+     */
     private Boolean checkDir(int[] move, int[] dir, int consecutive) {
-        int[] cpy = {move[0], move[1]};
-        int[] next = {move[0]+dir[0], move[1]+dir[1]};
+        int[] cpy = {move[0], move[1]}; // copy of move
+        int[] next = {move[0]+dir[0], move[1]+dir[1]}; // next cell in the dir
 
-        // follow owner in dir
+        // follow owner in the dir
         Player owner = this.board[move[1]][move[0]].getOwner();
         while(isOnBoard(next) && this.board[next[1]][next[0]].getOwner() == owner){
             cpy[0] = next[0];
@@ -129,6 +130,7 @@ public class TicTacToe {
         dir[0] *= -1;
         dir[1] *= -1;
 
+        // own sufficient consecutive cell in the dir  ?
         for(int i=0; i < consecutive; ++i){
             if(!isOnBoard(cpy))
                 return false;
@@ -140,6 +142,10 @@ public class TicTacToe {
         return true;
     }
 
+    /**
+     * check if board is full
+     * @return true if board is full, else false
+     */
     private Boolean checkfull() {
         for(var line : this.board)
             for(Cell cell : line)

@@ -1,4 +1,4 @@
-public class Player {
+public abstract class Player implements InteractionUtilisateur {
     public final char representation;
 
     Player(char representation) {
