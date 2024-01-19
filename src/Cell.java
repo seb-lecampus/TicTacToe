@@ -1,6 +1,6 @@
 public class Cell {
-    Player owner;
-    Cell(){
+    private Player owner;
+    public Cell(){
 
     }
 

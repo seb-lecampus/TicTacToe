@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class TicTacToe {
     private final int sizeX;
     private final int sizeY;
@@ -11,6 +9,7 @@ public class TicTacToe {
     private Player winner = null; // todo not player type ?
 
     View view = new View();
+    InteractionUtilisateur userInterface = new InteractionUtilisateur(view);
 
     TicTacToe(int sizeX, int sizeY, Boolean player1_is_human, Boolean player2_is_human) {
         this.sizeX = sizeX;
@@ -19,8 +18,8 @@ public class TicTacToe {
             for(int i=0; i < board.length; ++i)
                 for(int j=0; j < board[i].length; ++j)
                     board[i][j] = new Cell();
-        this.p1 = (player1_is_human) ? new PlayerHuman() : new PlayerCPU();
-        this.p2 = (player2_is_human) ? new PlayerHuman() : new PlayerCPU();
+        this.p1 = (player1_is_human) ? new PlayerHuman(userInterface, userInterface.askRepresentation()) : new PlayerCPU(view);
+        this.p2 = (player2_is_human) ? new PlayerHuman(userInterface, userInterface.askRepresentation()) : new PlayerCPU(view);
     }
 
     public void play(){
@@ -46,13 +45,10 @@ public class TicTacToe {
         } while(!isEnd(move, current));
 
         view.display_board(board);
-        if(winner != null)
-            System.out.printf("Winner %c !!!\n", winner.getRepresentation());
-        else
-            System.out.println("Draw !");
+        view.inform_winner(winner);
     }
 
-    public Boolean isOnBoard(int[] move){
+    protected Boolean isOnBoard(int[] move){
         int x = move[0];
         int y = move[1];
 
@@ -64,12 +60,12 @@ public class TicTacToe {
         return true;
     }
 
-    public void wrapOnBoard(int[] move){
+    protected void wrapOnBoard(int[] move){
         move[0] = Math.max(Math.min(move[0], sizeX-1), 0);
         move[1] = Math.max(Math.min(move[1], sizeY-1), 0);
     }
 
-    public Boolean isValidMove(int[] move) {
+    protected Boolean isValidMove(int[] move) {
         // Is on board ?
         if(!isOnBoard(move))
             return false;
@@ -86,7 +82,7 @@ public class TicTacToe {
      * @param p
      * @return true if there is a winner of a draw
      */
-    public Boolean isEnd(int[] move, Player p){
+    protected Boolean isEnd(int[] move, Player p){
         Boolean a = checkDir(move, new int[]{1, 1}, 3);
         Boolean b = checkDir(move, new int[]{1, 0}, 3);
         Boolean c = checkDir(move, new int[]{0, 1}, 3);
@@ -106,7 +102,7 @@ public class TicTacToe {
      * @param consecutive number of consecutive cell to win
      * @return true if okrighh
      */
-    private Boolean checkDir(int[] move, int[] dir, int consecutive) {
+    protected Boolean checkDir(int[] move, int[] dir, int consecutive) {
         int[] cpy = {move[0], move[1]}; // copy of move
         int[] next = {move[0]+dir[0], move[1]+dir[1]}; // next cell in the dir
 
@@ -139,7 +135,7 @@ public class TicTacToe {
      * check if board is full
      * @return true if board is full, else false
      */
-    private Boolean checkfull() {
+    protected Boolean checkfull() {
         for(var line : this.board)
             for(Cell cell : line)
                 if(cell.getOwner() == null)

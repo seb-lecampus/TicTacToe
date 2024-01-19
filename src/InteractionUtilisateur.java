@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class InteractionUtilisateur {
     private View view;
 
-    InteractionUtilisateur(View view){
+    public InteractionUtilisateur(View view){
         this.view = view;
     }
 
@@ -13,7 +13,7 @@ public class InteractionUtilisateur {
         return input.nextLine().charAt(0);
     }
 
-    public int[] askMoveFromPlayer(Player p) {
+    public int[] askMoveFromPlayer(PlayerHuman p) {
         int x, y;
         Scanner input = new Scanner(System.in);
 

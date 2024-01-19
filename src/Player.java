@@ -1,7 +1,7 @@
 public abstract class Player implements PlayerInterface {
     public final char representation;
 
-    Player(char representation) {
+    public Player(char representation) {
         this.representation = representation;
     }
 

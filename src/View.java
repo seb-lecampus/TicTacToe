@@ -29,7 +29,7 @@ public class View {
     public void inform_cpu_representation(PlayerCPU p){
         System.out.printf("CPU choose %c\n", p.getRepresentation());
     }
-
+    public void inform_cpu_move(PlayerCPU p){ System.out.printf("CPU %c play\n", p.getRepresentation()); }
     public void inform_winner(Player p) {
         if (p != null)
             System.out.printf("Winner %c !!!\n", p.getRepresentation());
