@@ -8,10 +8,10 @@ public class TicTacToe {
     private final Player p2;
     private Player winner = null; // todo not player type ?
 
-    View view = new View();
-    InteractionUtilisateur userInterface = new InteractionUtilisateur(view);
+    private View view = new View();
+    private InteractionUtilisateur userInterface = new InteractionUtilisateur(view);
 
-    TicTacToe(int sizeX, int sizeY, Boolean player1_is_human, Boolean player2_is_human) {
+    TicTacToe(int sizeX, int sizeY, boolean player1_is_human, boolean player2_is_human) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.board = new Cell[sizeY][sizeX];
@@ -48,7 +48,7 @@ public class TicTacToe {
         view.inform_winner(winner);
     }
 
-    protected Boolean isOnBoard(int[] move){
+    protected boolean isOnBoard(int[] move){
         int x = move[0];
         int y = move[1];
 
@@ -65,7 +65,7 @@ public class TicTacToe {
         move[1] = Math.max(Math.min(move[1], sizeY-1), 0);
     }
 
-    protected Boolean isValidMove(int[] move) {
+    protected boolean isValidMove(int[] move) {
         // Is on board ?
         if(!isOnBoard(move))
             return false;
@@ -82,11 +82,11 @@ public class TicTacToe {
      * @param p
      * @return true if there is a winner of a draw
      */
-    protected Boolean isEnd(int[] move, Player p){
-        Boolean a = checkDir(move, new int[]{1, 1}, 3);
-        Boolean b = checkDir(move, new int[]{1, 0}, 3);
-        Boolean c = checkDir(move, new int[]{0, 1}, 3);
-        Boolean d = checkDir(move, new int[]{1, -1}, 3);
+    protected boolean isEnd(int[] move, Player p){
+        boolean a = checkDir(move, new int[]{1, 1}, 3);
+        boolean b = checkDir(move, new int[]{1, 0}, 3);
+        boolean c = checkDir(move, new int[]{0, 1}, 3);
+        boolean d = checkDir(move, new int[]{1, -1}, 3);
 
         if(a || b || c || d) {
             winner = p;
@@ -102,7 +102,7 @@ public class TicTacToe {
      * @param consecutive number of consecutive cell to win
      * @return true if okrighh
      */
-    protected Boolean checkDir(int[] move, int[] dir, int consecutive) {
+    protected boolean checkDir(int[] move, int[] dir, int consecutive) {
         int[] cpy = {move[0], move[1]}; // copy of move
         int[] next = {move[0]+dir[0], move[1]+dir[1]}; // next cell in the dir
 
@@ -135,7 +135,7 @@ public class TicTacToe {
      * check if board is full
      * @return true if board is full, else false
      */
-    protected Boolean checkfull() {
+    protected boolean checkfull() {
         for(var line : this.board)
             for(Cell cell : line)
                 if(cell.getOwner() == null)
